@@ -1,0 +1,283 @@
+{include file="header"}
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 品牌管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div>
+				<span style="display: inline-block; width: 250px;"></span>
+				<input type="text" id="name" placeholder="权限分类名称" value="" class="input-text" style="width:120px">
+				<span id="span_token"></span>
+				<input type="text" id="description" placeholder="描述" value="" class="input-text" style="width:120px">
+				<button type="button" class="btn btn-success" id="add" name=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+				<span id="span">&nbsp;</span>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+				<span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a></span>
+				 <span class="r">共有数据：<strong>54</strong> 条</span> 
+			</div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" name="" value=""></th>
+							<th width="70">ID</th>
+							<th width="120">分类名称</th>
+							<th width="120">分类描述</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+
+<!--修改-->
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">修改权限分类</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<input type="" id="id_update" name="" hidden>
+				<br>
+				分类名称:
+				<input type="text" id="name_update" placeholder="权限分类名称" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				分类描述:
+				<input type="text" id="des_update" placeholder="描述" value="" class="input-text" style="width:200px">
+				<br>
+				<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="footer"}
+<script>
+	function getToken(){
+		$.ajax({
+			url:"{:url('common/commonToken')}",
+			dataType:'json',
+			success:function(res){
+				$("#span_token").html(res.data)
+				
+				//console.log(res.data)
+			}
+		})
+	}
+	getToken()
+	// ！！！展示！！！
+	show()
+	function show(){
+		$.ajax({
+			url:"{:url('permissioncate/show')}",
+			dataType:'json',
+			success:function(res){
+				var tr=''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].id+"'></td><td>"+res[i].id+"</td><td tid='"+res[i].id+"' tname='"+res[i].name+"'><span class='upname'>"+res[i].name+"</span></td><td>"+res[i].description+"</td><td class='f-14 product-brand-manage'><a onClick='modaldemo(\""+res[i].id+"\",\""+res[i].name+"\",\""+res[i].description+"\")' tyle='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del("+res[i].id+")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+	//！！！点击修改按钮弹窗！！！
+	function modaldemo(id,name,description){
+		$("#id_update").val(id)
+		$("#name_update").val(name)
+		$("#des_update").val(description)
+		// console.log(id_update)
+		// console.log(name_update)
+		// console.log(des_update)
+		$("#modal-demo").modal("show")
+	}
+
+	//！！！点击弹窗中的确认按钮！！！
+	$("#update").click(function(){
+		var __token__=$("#span_token").html()
+		var id =$("#id_update").val()
+		var name = $("#name_update").val()
+		var description = $("#des_update").val()
+		console.log(description)
+		$.ajax({
+			url:"{:url('permissioncate/updateAction')}",
+			data:{
+				__token__:__token__,
+				id:id,
+				name:name,
+				description:description,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				//console.log(res)
+				if (res.status=='ok') {
+					$("#modal-demo").modal("hide")
+					$("#update_span").html('')
+					show()
+					
+				}
+				if (res.status=='error') {
+					$("#update_span").html(res.data)
+					$("#update_span").css("color", "red")
+					setTimeout(function(){
+						$("#update_span").html("")
+					},3000);
+				}
+				getToken()
+			}
+		})
+	})
+
+	$(document).ready(function(){
+		//！！！双击即点即改！！！
+		$(document).on("dblclick",".upname",function(){
+			var name = $(this).text()
+			//console.log(name)
+			var input = "<input class='inputname' focus='' type='text' value='"+name+"' />"
+			//console.log(input)
+			$(this).parent().html(input)//如果不用.parent(),<input>默认会追加在<span>标签中，而不是替换
+			$(".inputname").focus()
+		})
+		$(document).on("blur",".inputname",function(){
+			var __token__=$("#span_token").html()
+			var _this = $(this)
+			//重新定义一个$(this),相当于失去焦点后，临时存储一个$this否则在修改未完成时会变成第一次的数据
+			var _parent = $(this).parent()//
+			var name = $(this).val()
+			var id = $(this).parent().attr("tid")
+			var old_name = $(this).parent().attr("tname")
+			var description = $(this).parent().next().html()
+			// console.log(name)
+			// console.log(old_name)
+			// console.log(description)
+			$.ajax({
+				url:"{:url('permissioncate/updateAction')}",
+				data:{
+					id:id,
+					__token__:__token__,
+					name:name,
+					description:description,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					if (res.status=="ok") {
+						var span = "<span class='upname'>"+name+"</span>"
+						_this.parent().html(span)
+						_parent.attr('tname',name)
+						show()
+					}
+					if (res.status=='error') {
+						var span = "<span class='upname'>"+old_name+"</span>"
+						_this.parent().html(span)
+					}
+					getToken()
+				}
+			})
+		})
+
+		//！！！添加！！！
+		$("#add").click(function(){
+			var __token__ = $("#span_token").html()
+			console.log(__token__)
+			var name = $("#name").val()
+			var description = $("#description").val()
+			$.ajax({
+				url:"{:url('permissioncate/addAction')}",
+				type:"post",
+				dataType:"json",
+				data:{
+					__token__:__token__,
+					name:name,
+					description:description,
+				},
+				success:function(res){
+					if (res.code=='0') {
+						$("#span").html(res.data)
+						$("#span").css("color","green")
+						$("#name").val('')
+						$("#description").val('')
+						setTimeout(function(){
+							$("#span").hide("")
+						},3000);
+					}
+					if (res.code=='1') {
+						$("#span").html(res.data)
+						$("#span").css("color","red")
+					}
+					if (res.code=='2') {
+						$("#span").html(res.data)
+						$("#span").css("color","red")
+					}
+					show()
+					getToken()
+				}
+
+			})
+		})
+	})
+	function del(id){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('permissioncate/del')}",
+				data:{
+					id:id,
+					 __token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					show()
+					getToken()
+				}
+			})
+		}
+	}
+
+	function datadel(){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		if (r==true){
+			var box = $(".mycheckbox:checked")
+			var id = ''
+			for (var i = 0; i < box.length; i++) {
+				id = id+","+ box[i].value
+			}
+			$.ajax({
+				url:"{:url('permissioncate/datadel')}",
+				data:{
+					id:id,
+					__token__:__token__,
+				},
+				dataType:'json',
+				type:'post',
+				success:function(res){
+					console.log(res)
+					show()
+					getToken()
+				}
+			})
+		}
+	}
+	
+
+</script>
+</body>
+</html>
+

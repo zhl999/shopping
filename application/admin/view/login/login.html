@@ -83,7 +83,7 @@
 				success:function(res){
 					if (res.code=='0') {
 						console.log(res.status)
-						//location.href="{:url('index/index')}"
+						location.href="{:url('index/index')}"
 					}else{
 						//$('#captcha').attr('src',"{:captcha_src()}?"+Math.random())
 						$("#captcha").attr('src',"{:captcha_src()}?"+Math.random())
