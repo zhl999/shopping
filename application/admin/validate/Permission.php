@@ -4,7 +4,7 @@ namespace app\admin\validate;
 
 use think\Validate;
 
-class Permissioncate_del_token extends Validate
+class Permission extends Validate
 {
     /**
      * 定义验证规则
@@ -13,7 +13,10 @@ class Permissioncate_del_token extends Validate
      * @var array
      */	
 	protected $rule =   [
-        'id'  => 'token', 
+        'name'  => 'require|max:50|min:1|token',
+        'category_id'  => 'require|min:1',
+        'path'  => 'require|max:100|min:1',
+        'description'   => 'require|max:200|min:1',    
     ];
     
     /**
@@ -22,7 +25,4 @@ class Permissioncate_del_token extends Validate
      *
      * @var array
      */	
-    // protected $message  =   [
-    //     'name.require' => '名称必须',
-    // ];
 }

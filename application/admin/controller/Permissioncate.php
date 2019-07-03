@@ -43,7 +43,7 @@ class Permissioncate extends Common
         }
     }
     public function show()
-    {
+    {	
     	$rbac = new Rbac();
     	$result = $rbac->getPermissionCategory([]);//当数组为空时，查所有
     	$json = json_encode($result);
@@ -84,17 +84,9 @@ class Permissioncate extends Common
 
     public function del()
     {
-    	// $token=Session::get('token');
-    	// $deltoken = Request::post('__token__');
-    	// if ($token!=$deltoken) {
-    	// 	$arr = ['code'=>'1','status'=>'error','dada'=>'令牌数据无效'];
-    	// 	$json = json_encode($arr);
-    	// 	echo $json;
-    	// 	die;
-    	// }
     	$data = Request::post();
     	$rbac = new Rbac();
-        $validate = new \app\admin\validate\Permissioncate_del_token;
+        $validate = new \app\admin\validate\Deletetoken;
         //1、使用验证器初步验证权限分类名称和描述是否符合要求
         if (!$validate->check($data)) {  
 			$arr = ['code'=>'1','status'=>'error','data'=>$validate->getError()];
@@ -111,7 +103,7 @@ class Permissioncate extends Common
     	$data= Request::post();
     	$id = $data['id'];
     	$rbac = new Rbac();
-        $validate = new \app\admin\validate\Permissioncate_del_token;
+        $validate = new \app\admin\validate\Deletetoken;
         //1、使用验证器初步验证权限分类名称和描述是否符合要求
         if (!$validate->check($data)) {  
 			$arr = ['code'=>'1','status'=>'error','data'=>$validate->getError()];

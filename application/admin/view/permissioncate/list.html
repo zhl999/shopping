@@ -8,7 +8,7 @@
 			<div>
 				<span style="display: inline-block; width: 250px;"></span>
 				<input type="text" id="name" placeholder="权限分类名称" value="" class="input-text" style="width:120px">
-				<span id="span_token"></span>
+				<span id="span_token" hidden></span>
 				<input type="text" id="description" placeholder="描述" value="" class="input-text" style="width:120px">
 				<button type="button" class="btn btn-success" id="add" name=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
 				<span id="span">&nbsp;</span>
@@ -46,7 +46,6 @@
 			</div>
 			<div class="modal-body">
 				<input type="" id="id_update" name="" hidden>
-				<br>
 				分类名称:
 				<input type="text" id="name_update" placeholder="权限分类名称" value="" class="input-text" style="width:200px">
 				<br>
@@ -122,7 +121,7 @@
 			dataType:'json',
 			type:'post',
 			success:function(res){
-				//console.log(res)
+				console.log(res.data)
 				if (res.status=='ok') {
 					$("#modal-demo").modal("hide")
 					$("#update_span").html('')
