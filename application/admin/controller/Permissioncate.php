@@ -82,7 +82,7 @@ class Permissioncate extends Common
         }
     }
 
-    public function del()
+    public function delete()
     {
     	$data = Request::post();
     	$rbac = new Rbac();

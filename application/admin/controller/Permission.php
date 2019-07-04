@@ -65,10 +65,10 @@ class Permission extends Common
         $id = $data['id'];
         $arr = Db::query("select * from permission where name = '$name' or path = '$path'");
         if (empty($arr)) {
-           Db::table('permission') ->update($data);
-           $arr1 = ['code'=>'0','status'=>'ok','data'=>'修改成功'];
-           $json =json_encode($arr1);
-           echo $json;die;
+            Db::table('permission') ->update($data);
+            $arr1 = ['code'=>'0','status'=>'ok','data'=>'修改成功'];
+            $json =json_encode($arr1);
+            echo $json;die;
         }else{
             foreach ($arr as $key => $value) {
                 if ($value['id']!=$id) {
@@ -84,7 +84,7 @@ class Permission extends Common
         }
 
     }
-    public function del()
+    public function delete()
     {
         $data = Request::post();
         $rbac = new Rbac();
@@ -116,6 +116,7 @@ class Permission extends Common
             $arr = ['code'=>'1','status'=>'error','data'=>'未选择任何对象'];
             $json = json_encode($arr);
             echo $json;
+            die;
         }else{
             $rbac = new Rbac();
             $id=explode(',', $id);
@@ -123,7 +124,7 @@ class Permission extends Common
             $rbac->delPermission($id);
             $arr=['code'=>'0','staus'=>'ok', 'data'=>'删除成功'];
             $json = json_encode($arr);
-            echo $json;
+            echo $json;die;
         }
     }
 }

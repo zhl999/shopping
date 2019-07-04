@@ -1,0 +1,104 @@
+{include file="header"}
+<body>
+<article class="cl pd-20">
+	<form class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="roleName" datatype="*4-16" nullmsg="用户账户不能为空">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">备注：</label>
+			<span id="span_token" hidden></span>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="description" name="">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">网站角色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<dl class="permission-list" id="permissionshow">
+				</dl>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="button" class="btn btn-success radius" id="add" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+{include file="footer"}
+<script type="text/javascript">
+	function getToken(){
+		$.ajax({
+			url:"{:url('common/commonToken')}",
+			dataType:'json',
+			success:function(res){
+				$("#span_token").html(res.data)
+			}
+		})
+	}
+	getToken()
+	$(document).ready(function(){
+		$("#add").click(function(){
+			var __token__=$("#span_token").html()
+			var name=$("#name").val()
+			var description=$("#description").val()
+			var box=$(".mycheckbox:checked")
+			var permission_id =''
+			for (var i = 0; i < box.length; i++) {
+				permission_id=permission_id+","+box[i].value
+			}
+			//console.log(permission_id)
+			$.ajax({
+				url:"{:url('role/addAction')}",
+				data:{
+					__token__:__token__,
+					name:name,
+					description:description,
+					permission_id:permission_id,
+				},
+				dataType:'json',
+				type:'post',
+				success:function(res){
+					getToken()
+					if (res.status=='error') {
+						alert(res.data)
+					}
+					if (res.status=='ok') {
+						alert(res.data)
+						$("#name").val('')
+						$("#description").val('')
+						$("#permission_id").prop("checked",false);
+					}
+				}
+			})
+		})
+	})
+	permissionshow()
+	function permissionshow(){
+		$.ajax({
+			url:"{:url('role/permissionShow')}",
+			dataType:'json',
+			success:function(res){
+				//console.log(res)
+				var dl=''
+				$.each(res,function(key,value){
+					dl=dl+"<dt><label><input type='checkbox' value=''>"+key+"</label></dt><dd>"
+					$.each(value,function(key1,value1){
+						dl=dl+"<label><input class='mycheckbox' type='checkbox' value='"+value1.id+"'>"+value1.name+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					})
+					dl=dl+"</dd>"
+				})
+				//console.log(dl)
+				$("#permissionshow").html(dl)
+				//console.log(permission_id)
+			}	
+		})
+	}
+</script>
+</body>
+</html>

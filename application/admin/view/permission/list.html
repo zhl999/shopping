@@ -27,13 +27,13 @@
 						<th scope="col" colspan="7">权限节点</th>
 					</tr>
 					<tr class="text-c">
-						<th width="100"><input type="checkbox" name="" value=""></th>
-						<th width="150">ID</th>
-						<th width="250">权限名称</th>
-						<th>权限分组</th>
-						<th>权限路径</th>
-						<th>权限描述</th>
-						<th width="150">操作</th>
+						<th width="50"><input type="checkbox" name="" value=""></th>
+						<th width="100">ID</th>
+						<th width="150">权限名称</th>
+						<th width="150">权限分组</th>
+						<th width="250">权限路径</th>
+						<th width="250">权限描述</th>
+						<th width="100">操作</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -133,15 +133,13 @@
 		})
 	}
 	show()
-	gettoken()
-	function gettoken(){
+	getToken()
+	function getToken(){
 		$.ajax({
 			url:"{:url('common/commonToken')}",
 			dataType:'json',
 			success:function(res){
 				$("#span_token").html(res.data)
-				
-				//console.log(res.data)
 			}
 		})
 	}
@@ -206,7 +204,7 @@
 			type:'post',
 			success:function(res){
 				console.log(res.data)
-				gettoken()
+				getToken()
 				if (res.status=='ok') {
 					$("#modal-demoll").modal("hide")
 					$("#update_span").html('')
@@ -245,7 +243,7 @@
 				dataType:'json',
 				success:function(res){
 					//console.log(res)
-					gettoken()
+					getToken()
 					if (res.status=='ok') {
 						$("#name").val('')
 						 $('#category_id').find("option:selected").val();
@@ -271,7 +269,7 @@
 		console.log(__token__)
 		if (r==true){
 			$.ajax({
-				url:"{:url('permission/del')}",
+				url:"{:url('permission/delete')}",
 				data:{
 					id:id,
 					 __token__:__token__,
@@ -280,7 +278,7 @@
 				dataType:'json',
 				success:function(res){
 					show()
-					gettoken()
+					getToken()
 				}
 			})
 		}
@@ -305,7 +303,7 @@
 				success:function(res){
 					//console.log(res)
 					show()
-					gettoken()
+					getToken()
 				}
 			})
 		}
