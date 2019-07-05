@@ -4,20 +4,37 @@
 	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 角色管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
-			<div class="cl pd-5 bg-1 bk-gray"> <span class="l"> <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" href="{:url('role/add')}"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a></span>
-			<span id="span_token" hidden></span>
+			<div class="text-c">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l">
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+					</a>
+					<a href="javascript:;" class="btn btn-primary radius">
+						<i class="Hui-iconfont">&#xe600;</i><span onclick="modaldemoll()"> 添加用户</span>
+					</a>
+					<span id="span_token" hidden></span>
+				</span>
 			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
 			<div class="mt-10">
 			<table class="table table-border table-bordered table-hover table-bg">
 				<thead>
 					<tr>
-						<th scope="col" colspan="6">角色管理</th>
+						<th scope="col" colspan="8">角色管理</th>
 					</tr>
 					<tr class="text-c">
-						<th width="70"><input type="checkbox" value="" name=""></th>
-						<th width="80">ID</th>
-						<th width="200">角色名</th>
-						<th width="200">描述</th>
+						<th width="50"><input type="checkbox" value="" name=""></th>
+						<th width="50">ID</th>
+						<th width="100">登录名</th>
+						<th width="200">密码</th>
+						<th width="100">角色名</th>
+						<th width="120">电话</th>
+						<th width="120">创建时间</th>
 						<th width="100">操作</th>
 					</tr>
 				</thead>
@@ -28,27 +45,65 @@
 		</article>
 	</div>
 </section>
-<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog" style="width: 800px;">
+<div id="modal-demoll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
 		<div class="modal-content radius">
 			<div class="modal-header">
-				<h3 class="modal-title">权限修改</h3>
+				<h3 class="modal-title">添加用户</h3>
 				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
 			</div>
 			<div class="modal-body">
-					<input type="text" id="id" hidden>
-				权限名称:
-					<input type="text" name="" id="name"  placeholder="权限名称" value="" class="input-text" style="width:200px">
-					<br>
-					<br>
-				权限描述:
-					<input type="text" name="" id="description"  placeholder="权限描述" value="" class="input-text" style="width:200px">
-					<br>
-					<span id="update_span">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<br>
-					<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;</span>
-				<dl class="permission-list" id="permissionshow">
-				</dl>
+				用户名称:
+					<input type="text" name="" id="name"  placeholder="用户名称" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				用户密码:
+					<input type="text" name="" id="password"  placeholder="用户密码" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				用户角色:
+					<select id="role_id" style="width: 200px; height: 28px;">
+						
+					</select>
+				<br>
+				<br>
+				用户电话:
+					<input type="text" name="" id="mobile"  placeholder="用户电话" value="" class="input-text" style="width:200px">
+				<span id="add_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="add">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">修改用户</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+					<input type="text" name="" id="up_id" hidden>
+				用户名称:
+					<input type="text" name="" id="up_name"  placeholder="用户名称" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				用户密码:
+					<input type="text" name="" id="up_password"  placeholder="用户密码" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				用户角色:
+					<select id="up_role_id" style="width: 200px; height: 28px;">
+						
+					</select>
+				<br>
+				<br>
+				用户电话:
+					<input type="text" name="" id="up_mobile"  placeholder="用户电话" value="" class="input-text" style="width:200px">
+				<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-primary" id="update">确定</button>
@@ -69,76 +124,110 @@
 		})
 	}
 	getToken()
+
+	function modaldemoll(){
+		$("#modal-demoll").modal("show")
+		getrole_id()
+	}
+
+	$("#add").click(function(){
+		var __token__=$("#span_token").html()
+		var user_name=$("#name").val()
+		var password=$("#password").val()
+		var role_id=$("#role_id").val()
+		//console.log(role_id)
+		var mobile=$("#mobile").val()
+		$.ajax({
+			url:"{:url('user/addAction')}",
+			data:{
+				__token__:__token__,
+				user_name:user_name,
+				password:password,
+				role_id:role_id,
+				mobile:mobile,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				getToken()
+				if (res.status=='ok') {
+					$("#name").val('')
+					$("#password").val('')
+					$('#role_id').find("option:selected").val();
+					$("#mobile").val('')
+					$("#modal-demoll").modal("hide")
+					show()
+				}
+				if (res.status=='error') {
+				$("#add_span").html(res.data)
+				$("#add_span").css("color", "red")
+					setTimeout(function(){
+						$("#add_span").html("&nbsp;&nbsp;&nbsp;")
+					},3000);
+				}
+			}
+		})
+	})
+
 	function show(){
 		$.ajax({
-			url:"{:url('role/show')}",
+			url:"{:url('user/show')}",
 			dataType:'json',
 			success:function(res){
 				//console.log(res)
 				var tr=''
 				for (var i = 0; i < res.length; i++) {
-					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].id+"'></td><td>"+res[i].id+"</td><td>"+res[i].name+"</td><td>"+res[i].description+"</td><td class='f-14 product-brand-manage'><a onclick='modaldemo(\""+res[i].id+"\",\""+res[i].name+"\",\""+res[i].description+"\")' tyle='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del("+res[i].id+")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].id+"'></td><td>"+res[i].id+"</td><td>"+res[i].user_name+"</td><td>"+res[i].password+"</td><td>"+res[i].name+"</td><td>"+res[i].mobile+"</td><td>"+res[i].create_time+"</td><td class='f-14 product-brand-manage'><a onclick='modaldemo(\""+res[i].id+"\",\""+res[i].user_name+"\",\""+res[i].password+"\",\""+res[i].role_id+"\",\""+res[i].mobile+"\")' tyle='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del("+res[i].id+")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
 				}
 				$(".table tbody").html(tr)
 			}
 		})
 	}
 	show()
-	function modaldemo(id,name,description){
-		$("#id").val(id)
-		$("#name").val(name)
-		$("#description").val(description)
+	function getrole_id(str,id=0){
 		$.ajax({
-			url:"{:url('role/mypermissionshow')}",
-			data:{
-				id:id,
-			},
-			type:'post',
+			url:"{:url('role/show')}",
 			dataType:'json',
 			success:function(res){
-				//console.log(res.data1)
-				var p_arr = res.p_arr
-				var r_p_arr=res.r_p_arr
-				var dl=''
-				$.each(p_arr,function(key,value){
-					dl=dl+"<dt><label><input type='checkbox' value=''>"+key+"</label></dt><dd>"
-					$.each(value,function(key1,value1){
-						dl=dl+"<label><input class='mycheckbox' type='checkbox' id='p"+value1.id+"' value='"+value1.id+"'>"+value1.name+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-					})
-					dl=dl+"</dd>"
-				})
-				$("#permissionshow").html(dl)
-				//console.log(dl)
-				$.each(r_p_arr,function(key,value){
-					//console.log(value)
-					var p_id="p"+value.permission_id
-					//console.log(p_id)
-					$("#"+p_id).prop('checked',true)
-				})
+				var option=''
+				for (var i = 0; i < res.length; i++) {
+					if (id==res[i].id) {
+						option=option+"<option value='"+res[i].id+"' selected>"+res[i].name+"</option>"
+					}else{
+						option=option+"<option value='"+res[i].id+"'>"+res[i].name+"</option>"
+					}
+				}
+				$("#"+str).html(option)
 			}
 		})
+	}
+	getrole_id('role_id')
+	function modaldemo(id,user_name,password,role_id,mobile){
+		$("#up_id").val(id)
+		$("#up_name").val(user_name)
+		$("#up_password").val(password)
+		getrole_id('up_role_id',role_id)
+		$("#up_mobile").val(mobile)
 		$("#modal-demo").modal("show")
 	}
 
 	$("#update").click(function(){
 		var __token__=$("#span_token").html()
-		var id=$("#id").val()
-		var name=$("#name").val()
-		var description=$("#description").val()
-		var box=$(".mycheckbox:checked")
-		var permission_id =''
-		for (var i = 0; i < box.length; i++) {
-			permission_id=permission_id+","+box[i].value
-		}
-		//console.log(permission_id)
+		var id=$("#up_id").val()
+		var user_name=$("#up_name").val()
+		var password=$("#up_password").val()
+		var role_id=$("#up_role_id").val()
+		var mobile =$("#up_mobile").val()
+		console.log(user_name)
 		$.ajax({
-			url:"{:url('role/updateAction')}",
+			url:"{:url('user/updateAction')}",
 			data:{
-				__token__:__token__,
 				id:id,
-				name:name,
-				description:description,
-				permission_id:permission_id,
+				__token__:__token__,
+				user_name:user_name,
+				password:password,
+				role_id:role_id,
+				mobile:mobile,
 			},
 			dataType:'json',
 			type:'post',
@@ -163,7 +252,7 @@
 		console.log(__token__)
 		if (r==true){
 			$.ajax({
-				url:"{:url('role/delete')}",
+				url:"{:url('user/delete')}",
 				data:{
 					id:id,
 					 __token__:__token__,
@@ -186,8 +275,9 @@
 			for (var i = 0; i < box.length; i++) {
 				id = id+","+ box[i].value
 			}
+			console.log(id)
 			$.ajax({
-				url:"{:url('role/datadel')}",
+				url:"{:url('user/datadel')}",
 				data:{
 					id:id,
 					__token__:__token__,

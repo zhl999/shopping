@@ -246,7 +246,7 @@
 					getToken()
 					if (res.status=='ok') {
 						$("#name").val('')
-						 $('#category_id').find("option:selected").val();
+						$('#category_id').find("option:selected").val();
 						$("#path").val('')
 						$("#description").val('')
 						$("#modal-demo").modal("hide")
@@ -256,7 +256,7 @@
 					$("#add_span").html(res.data)
 					$("#add_span").css("color", "red")
 						setTimeout(function(){
-							$("#add_span").html("")
+							$("#add_span").html("&nbsp;&nbsp;&nbsp;")
 						},3000);
 					}
 				}
