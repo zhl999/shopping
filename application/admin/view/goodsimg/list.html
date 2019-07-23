@@ -1,0 +1,108 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 图片管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c">
+				
+				
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+				<span class="l">
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
+					</a>
+					上传图片:
+					<input type="text" name="" id="goods_id" value="{$goods_id}" hidden>
+					<input type="file" name="goods_img[]" id="goods_img" multiple>
+					<button class="btn btn-success" id="add" name="">确定</button>
+					<span id="span_token" hidden></span>
+				</span>
+				<span class="r">共有数据：<strong>54</strong> 条</span>
+			</div>
+			<table class="table table-border table-bordered table-bg">
+				<thead>
+					<tr>
+						<th scope="col" colspan="7">权限节点</th>
+					</tr>
+					<tr class="text-c">
+						<th width="50"><input type="checkbox" name="" value=""></th>
+						<th width="100">ID</th>
+						<th width="150">图片地址</th>
+						<th width="150">商品名称</th>
+						<th width="100">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</article>
+	</div>
+</section>
+{include file="footer"}
+<script type="text/javascript">
+	$("#add").click(function(){
+		var goods_id=$("#goods_id").val()
+		var formData = new FormData();
+		for(var i=0; i<$('#goods_img')[0].files.length;i++){
+                   formData.append('goods_img[]', $('#goods_img')[0].files[i]);
+                   //console.log($('#goods_img')[0].files[i])
+               }
+		formData.append('goods_id',goods_id)
+		$.ajax({
+			url:"{:url('goodsimg/addaction')}",
+			data: formData,
+			contentType: false, // 注意这里应设为false
+			processData: false,
+			cache: false,
+			//dataType:'json',
+			type:'post',
+			success:function(res){
+				show()
+			}
+		})
+	})
+
+	show()
+	function show(){
+		var goods_id=$("#goods_id").val()
+		//console.log(goods_id)
+		$.ajax({
+			url:"{:url('goodsimg/show')}",
+			data:{
+				goods_id:goods_id,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				var tr = ''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' value='"+res[i].img_id+"' class='mycheckbox'></td><td>"+res[i].img_id+"</td><td><img src='/uploads/goodsimg/"+res[i].small_img+"'></td><td>"+res[i].goods_name+"</td><td class='f-14 product-brand-manage'><a tyle='text-decoration:none'</a> <a onclick='del("+res[i].img_id+")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+
+	function del(img_id){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('goodsimg/delete')}",
+				data:{
+					img_id:img_id,
+					 //__token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					show()
+				}
+			})
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品属性 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="属性名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 属性名称</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					<a class="btn btn-primary radius" href="javascript:;" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span onclick="modaldemo()"> 属性添加</span>
+					</a>
+				</span>
+				<select id="attr_category" onchange="show()">
+					<option value="0">请选择--</option>
+				</select>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="70"><input type="checkbox" name="" value=""></th>
+							<th width="200">ID</th>
+							<th>属性名称</th>
+							<th>商品属性操作</th>
+							<th width="200">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
+				</table>
+				<div class="formControls col-xs-8 col-sm-9">
+					<dl class="permission-list" id="myattr">
+					</dl>
+					<button type="button" class="btn btn-success radius" id="goods_attr_add" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
+{include file="footer"}
+<script type="text/javascript">
+	function attrcategory(){
+		$.ajax({
+			url:"{:url('attrcategory/show')}",
+			data:{
+				goods_id:{$goods_id},
+			},
+			type:'post',
+			dataType:'json',
+			success:function(res){
+				var arr=res.arr
+				var attr_cate_id=res.attr_cate_id
+				var option=''
+				for (var i = 0; i < arr.length; i++) {
+					option=option+"<option value='"+arr[i].attr_cate_id+"'>"+arr[i].attr_cate_name+"</option>"
+				}
+				$("#attr_category").append(option)
+				if (attr_cate_id) {
+					$("#attr_category option[value='"+attr_cate_id+"']").prop("selected",true)
+					show()
+				}
+			}
+		})
+	}
+	attrcategory()
+	function show(){
+    	var attr_cate_id =  $("#attr_category").val();
+    	//console.log(attr_cate_id)
+    	$.ajax({
+    		url:"{:url('goodsattr/show')}",
+    		data:{
+    			goods_id:{$goods_id},
+    			attr_cate_id:attr_cate_id,
+    		},
+    		dataType:'json',
+    		type:'post',
+    		success:function(res){
+    			var arr=res.arr
+    			var goods_attr_arr=res.goods_attr_arr
+    			var dl=''
+				$.each(arr,function(key,value){
+					// console.log(value)
+					// return false
+					dl=dl+"<dt><label><input type='checkbox' class='attr_id' value='"+value[0].attr_id+"'>"+key+"</label></dt><dd>"
+					$.each(value,function(key1,value1){
+						dl=dl+"<label><input id='a"+value1.attr_details_id+"' class='attr_details_id' attr_id='"+value1.attr_id+"' type='checkbox' value='"+value1.attr_details_id+"'>"+value1.attr_detail_name+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+					})
+					dl=dl+"</dd>"
+				})
+    			$("#myattr").html(dl)
+    			$.each(goods_attr_arr,function(key,value){
+    				var id='a'+value.attr_details_id
+    				$("#"+id).prop("checked",true)
+    			})
+    		}
+    	})
+	}
+
+    $(document).ready(function(){
+    	$("#goods_attr_add").click(function(){
+    		var attr_cate_id =  $("#attr_category").val();
+			var attr_details_box=$(".attr_details_id:checked")
+			var attr_details_id=''
+			for (var i = 0; i < attr_details_box.length; i++) {
+				attr_details_id=attr_details_id+","+attr_details_box[i].value
+			}
+			console.log(attr_details_id)
+			$.ajax({
+				url:"{:url('goodsattr/addAction')}",
+				data:{
+					attr_cate_id:attr_cate_id,
+					goods_id:{$goods_id},
+					attr_details_id:attr_details_id,
+				},
+				dataType:'json',
+				type:'post',
+				success:function(res){
+					if (res.status=='ok') {
+						alert(res.data)
+					}
+				}
+			})
+    	})
+    })
+</script>
+</body>
+</html>

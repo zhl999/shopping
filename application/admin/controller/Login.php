@@ -4,6 +4,7 @@ use think\Controller;
 use app\admin\model\User;
 use think\facade\Session;
 use think\captcha\Captcha;
+use gmars\rbac\Rbac;
 use Request;
 use Db;
 class Login extends controller
@@ -25,13 +26,14 @@ class Login extends controller
 			die;
 		}else{
 			$where = ['user_name' => $name,'password' => $password];
-			//$result = User::where($where)->find();
 			$result = User::where($where)->find();
 			if (empty($result)) {
 				$arr = ['code' => '2','status' => 'error','data' => '账号或密码错误'];
 				echo $json=json_encode($arr);
 				die;
 			}else{
+				$rbac=new Rbac();
+				$rbac->cachePermission($result['id']);
 				$arr = ['code' => '0','status' => 'ok'];
 				Session::set('name',$name);
 				echo $json=json_encode($arr);
@@ -41,7 +43,7 @@ class Login extends controller
     }
     public function loginOut()
     {
-       Session::delete('name');
+       Session::clear('name');
        $this->redirect('login/login');
     }
 }

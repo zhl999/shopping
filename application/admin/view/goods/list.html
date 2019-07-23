@@ -1,0 +1,183 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					<a class="btn btn-primary radius" href="javascript:;" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span onclick="modaldemo()"> 商品添加</span>
+					</a>
+					<a class="btn btn-primary radius" href="{:url('attrcategory/list')}" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span> 属性分类</span>
+					</a>
+				</span>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" name="" value=""></th>
+							<th width="70">ID</th>
+							<th width="120">商品名称</th>
+							<th width="120">商品品牌</th>
+							<th>商品描述</th>
+							<th>图片处理</th>
+							<th>商品属性操作</th>
+							<th>货品操作</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 700px;">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">商品添加</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				商品名称: 
+					<input type="text" name="" id="goods_name"  placeholder="商品名称" value="" class="input-text" style="width:300px">
+					<br>
+					<br>
+				商品分类:
+					<select id="category" class="input-text" style="width: 200px;">
+						<option></option>
+					</select>
+					<br>
+					<br>
+				商品品牌:
+					<select id="brand" class="input-text" style="width: 200px;">
+						<option></option>
+					</select>
+					<br>
+					<br>
+				商品描述: 
+					<input type="text" name="" id="goods_desc"  placeholder="商品描述" value="" class="input-text" style="width:300px">
+					<br>
+					<br>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="addAction">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="footer"}
+<script type="text/javascript">
+	function show(){
+		$.ajax({
+			url:"{:url('goods/show')}",
+			dataType:'json',
+			success:function(res){
+				//console.log(res)
+				var tr=''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].goods_id+"'></td><td>"+res[i].goods_id+"</td><td>"+res[i].goods_name+"</td><td>"+res[i].brand_name+"</td><td>"+res[i].goods_desc+"</td><td><a href='{:url('goodsimg/list')}?goods_id="+res[i].goods_id+"'>查看大图</a></td><td><a href='{:url('goodsattr/list')}?goods_id="+res[i].goods_id+"' style='text-decoration:none' title='添加'><i class='Hui-iconfont'>&#xe600;</i></a> &nbsp;&nbsp;&nbsp;<a class='Hui-iconfont' style='text-decoration:none' title='编辑'>&#xe6df;</a></td><td><a href='{:url('huopin/list')}?goods_id="+res[i].goods_id+"' style='text-decoration:none'>货品</a></td><td class='f-14 product-brand-manage'><a onclick='modaldemoll(\""+res[i].goods_id+"\",\""+res[i].goods_name+"\",\""+res[i].cat_id+"\",\""+res[i].brand_id+"\",\""+res[i].goods_desc+"\")' style='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del(\""+res[i].goods_id+"\")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+	show()
+	function modaldemo(){
+		$.ajax({
+			url:"{:url('goods/category')}",
+			dataType:'json',
+			success:function(res){
+				//console.log(res)
+				cate_arr=res.cate_arr
+				brand_arr=res.brand_arr
+				//console.log(cate_arr)
+				var option=''
+				for (var i = 0; i < cate_arr.length; i++) {
+					option=option+"<option value='"+cate_arr[i].cat_id+"'>"+cate_arr[i].cat_name+"</option>"
+				}
+				//console.log(option)
+				$("#category").html(option)
+				var option1=''
+				for (var i = 0; i < brand_arr.length; i++) {
+					option1=option1+"<option value='"+brand_arr[i].brand_id+"'>"+brand_arr[i].brand_name+"</option>"
+				}
+				$("#brand").html(option1)
+			}
+		})
+		$("#modal-demo").modal("show")
+	}
+	$("#addAction").click(function(){
+		var goods_name=$("#goods_name").val()
+		var category=$("#category").val()
+		var brand=$("#brand").val()
+		var goods_desc=$("#goods_desc").val()
+		$.ajax({
+			url:"{:url('goods/addaction')}",
+			data:{
+				goods_name:goods_name,
+				category:category,
+				brand:brand,
+				goods_desc:goods_desc,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				if (res.status=='ok') {
+					$("#goods_name").val('')
+					$('#category').val('');
+					$("#brand").val('')
+					$("#goods_desc").val('')
+					$("#modal-demo").modal("hide")
+					show()
+				}
+			}
+		})
+	})
+	function modaldemoll(goods_id,goods_name,cat_id,brand_id,goods_desc){
+
+	}
+	function del(goods_id){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('goods/delete')}",
+				data:{
+					goods_id:goods_id,
+					 //__token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					show()
+					if (res.status=='ok') {
+						console.log(res.data)
+					}
+					if (res.status=='error') {
+						alert(res.data)
+					}
+				}
+			})
+		}
+	}
+</script>
+</body>
+</html>

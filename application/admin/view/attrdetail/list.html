@@ -1,0 +1,200 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品属性 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="属性名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 属性名称</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					<a class="btn btn-primary radius" href="javascript:;" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span onclick="modaldemo()"> 添加属性值</span>
+					</a>
+				</span>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="70"><input type="checkbox" name="" value=""></th>
+							<th width="200">ID</th>
+							<th>属性名称</th>
+							<th>商品属性操作</th>
+							<th width="200">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">添加属性值</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+					<input type="text" name="" id="attr_id" value="{$attr_id}" hidden>
+				属性名称: 
+					<input type="text" name="" id="attr_detail_name"  placeholder="属性值名称" value="" class="input-text" style="width:250px">
+					<br>
+					<span id="add_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="add">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-demoll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">属性修改</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+					<input type="text" name="" id="up_attr_id" value="" hidden>
+					<input type="text" name="" id="up_attr_detail_id" value="" hidden>
+				属性名称: 
+					<input type="text" name="" id="up_attr_detail_name"  placeholder="属性名称" value="" class="input-text" style="width:250px">
+					<br>
+					<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;"> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="footer"}
+<script type="text/javascript">
+	function show(){
+		$.ajax({
+			url:"{:url('attrdetail/show')}",
+			data:{
+				attr_id:{$attr_id},
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				var tr=''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].attr_details_id+"'></td><td>"+res[i].attr_details_id+"</td><td>"+res[i].attr_detail_name+"</td><td><a href='{:url('attrdetail/list')}?attr_id="+res[i].attr_detail_id+"' style='text-decoration:none'>配置</a></td><td class='f-14 product-brand-manage'><a onclick='modaldemoll(\""+res[i].attr_id+"\",\""+res[i].attr_details_id+"\",\""+res[i].attr_detail_name+"\")' style='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del(\""+res[i].attr_details_id+"\")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+	show()
+	function modaldemo(){
+		$("#modal-demo").modal("show")
+	}
+	$("#add").click(function(){
+		var attr_detail_name=$("#attr_detail_name").val()
+		var attr_id=$("#attr_id").val()
+		$.ajax({
+			url:"{:url('attrdetail/addAction')}",
+			data:{
+				attr_detail_name:attr_detail_name,
+				attr_id:attr_id,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				if (res.status=='ok') {
+					$("#modal-demo").modal("hide")
+					$("#attr_detail_name").val('')
+					$("#add_span").html('&nbsp;&nbsp;')
+					show()
+					
+				}
+				if (res.status=='error') {
+					$("#add_span").html(res.data)
+					$("#add_span").css("color", "red")
+					setTimeout(function(){
+						$("#add_span").html("&nbsp;&nbsp;&nbsp;")
+					},3000);
+				}
+			}
+		})
+	})
+	function modaldemoll(attr_id,attr_details_id,attr_detail_name){
+		$("#up_attr_id").val(attr_id)
+		$("#up_attr_detail_name").val(attr_detail_name)
+		$("#up_attr_detail_id").val(attr_details_id)
+		$("#modal-demoll").modal("show")
+	}
+	$("#update").click(function(){
+		var attr_id=$("#up_attr_id").val()
+		var attr_detail_id=$("#up_attr_detail_id").val()
+		var attr_detail_name=$("#up_attr_detail_name").val()
+		$.ajax({
+			url:"{:url('attrdetail/updateaction')}",
+			data:{
+				attr_id:attr_id,
+				attr_detail_id:attr_detail_id,
+				attr_detail_name:attr_detail_name,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				console.log(res)
+				if (res.status=='ok') {
+					$("#modal-demoll").modal("hide")
+					$("#update_span").html('&nbsp;&nbsp;')
+					show()
+					
+				}
+				if (res.status=='error') {
+					$("#update_span").html(res.data)
+					$("#update_span").css("color", "red")
+					setTimeout(function(){
+						$("#update_span").html("&nbsp;&nbsp;&nbsp;")
+					},3000);
+				}
+			}
+		})
+	})
+	function del(attr_details_id){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		//console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('attrdetail/delete')}",
+				data:{
+					attr_details_id:attr_details_id,
+					// __token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					show()
+					if (res.status=='ok') {
+						console.log(res.data)
+					}
+					if (res.status=='error') {
+						alert(res.data)
+					}
+				}
+			})
+		}
+	}
+</script>
+</body>
+</html>

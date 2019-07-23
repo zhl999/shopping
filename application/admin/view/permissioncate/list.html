@@ -111,7 +111,7 @@
 		var description = $("#des_update").val()
 		console.log(description)
 		$.ajax({
-			url:"{:url('permissioncate/updateAction')}",
+			url:"{:url('permissioncate/updateaction')}",
 			data:{
 				__token__:__token__,
 				id:id,
@@ -163,7 +163,7 @@
 			// console.log(old_name)
 			// console.log(description)
 			$.ajax({
-				url:"{:url('permissioncate/updateAction')}",
+				url:"{:url('permissioncate/updateaction')}",
 				data:{
 					id:id,
 					__token__:__token__,
@@ -195,7 +195,7 @@
 			var name = $("#name").val()
 			var description = $("#description").val()
 			$.ajax({
-				url:"{:url('permissioncate/addAction')}",
+				url:"{:url('permissioncate/addaction')}",
 				type:"post",
 				dataType:"json",
 				data:{
@@ -204,7 +204,9 @@
 					description:description,
 				},
 				success:function(res){
-					if (res.code=='0') {
+
+					getToken()
+					if (res.status=='ok') {
 						$("#span").html(res.data)
 						$("#span").css("color","green")
 						$("#name").val('')
@@ -212,17 +214,13 @@
 						setTimeout(function(){
 							$("#span").hide("")
 						},3000);
+						show()
 					}
-					if (res.code=='1') {
+					if (res.status=='error') {
 						$("#span").html(res.data)
 						$("#span").css("color","red")
 					}
-					if (res.code=='2') {
-						$("#span").html(res.data)
-						$("#span").css("color","red")
-					}
-					show()
-					getToken()
+
 				}
 
 			})
@@ -244,6 +242,12 @@
 				success:function(res){
 					show()
 					getToken()
+					if (res.status=='ok') {
+						console.log(res.data)
+					}
+					if (res.status=='error') {
+						alert(res.data)
+					}
 				}
 			})
 		}

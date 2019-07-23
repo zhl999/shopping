@@ -1,0 +1,66 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 订单管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					<a class="btn btn-primary radius" href="{:url('dingdan/daochu')}" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						导出
+					</a>
+					<input type="file" name="daoru" id="daoru">
+					<button id="add">确定</button>
+				</span>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" name="" value=""></th>
+							<th width="70">ID</th>
+							<th width="200">商品id</th>
+							<th width="200">货品属性</th>
+							<th>货品价格</th>
+							<th>货品库存</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+{include file="footer"}
+<script type="text/javascript">
+	$("#add").click(function(){
+		var formData = new FormData();
+		formData.append('myfile', $('#daoru')[0].files[0]);
+		// console.log($('#daoru')[0].files[0])
+		$.ajax({
+			url:"{:url('dingdan/aa')}",
+			data: formData,
+			contentType: false, // 注意这里应设为false
+			processData: false,
+			cache: false,
+			//dataType:'json',
+			type:'post',
+			success:function(res){
+				console.log(res)
+			}
+		})
+	})
+</script>
+</body>
+</html>

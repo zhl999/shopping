@@ -1,0 +1,323 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 品牌管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i>批量删除</a> 
+					<a class="btn btn-primary radius" href="javascript:;" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span onclick="modaldemo()"> 品牌添加</span>
+					</a>  
+				</span>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" name="" value=""></th>
+							<th width="70">ID</th>
+							<th width="120">品牌名称</th>
+							<th width="120">品牌logo</th>
+							<th width="100">品牌描述</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">品牌添加</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+					<input type="text" id="up_brand_id" hidden>
+				品牌名称:
+					<input type="text" name="" id="brand_name"  placeholder="品牌名称" value="" class="input-text" style="width:200px">
+					<br>
+					<br>
+				品牌logo:
+					<input type="file" name="brand_logo" id="brand_logo" value="" style="width:200px">
+					<br>
+					<br>
+				品牌描述:
+					<input type="text" name="" id="brand_desc"  placeholder="品牌描述" value="" class="input-text" style="width:200px">
+					<br>
+					<span id="add_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="add">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-demoll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width: 800px;">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">品牌修改</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+					<input type="text" id="up_brand_id" hidden>
+				品牌名称:
+					<input type="text" name="" id="up_brand_name"  placeholder="权限名称" value="" class="input-text" style="width:200px">
+					<br>
+					<br>
+				品牌描述:
+					<input type="text" name="" id="up_brand_desc"  placeholder="权限名称" value="" class="input-text" style="width:200px">
+					<br>
+					<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-demott" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">修改图片</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<span id="up_id" hidden></span>
+				原始图片:<img src="" id="up_img">
+				<br>
+				<br>
+				更改logo:
+				<span id="newimg"></span>
+				<input type="file" id="up_brand_logo" name="up_brand_logo">
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="logo_update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="footer"}
+<script type="text/javascript">
+	function getToken(){
+		$.ajax({
+			url:"{:url('common/commonToken')}",
+			dataType:'json',
+			success:function(res){
+				$("#span_token").html(res.data)
+			}
+		})
+	}
+	getToken()
+	show()
+	function show(){
+		$.ajax({
+			url:"{:url('brand/show')}",
+			dataType:'json',
+			success:function(res){
+				//console.log(res)
+				var tr=''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' class='mycheckbox' value='"+res[i].brand_id+"'></td><td>"+res[i].brand_id+"</td><td>"+res[i].brand_name+"</td><td><img src='/uploads/brandlogo/"+res[i].brand_logo+"'>&nbsp;&nbsp;&nbsp;<a onclick='modaldemott(\""+res[i].brand_id+"\",\""+res[i].brand_logo+"\")'>查看大图</a></td><td>"+res[i].brand_desc+"</td><td class='f-14 product-brand-manage'><a onclick='modaldemoll(\""+res[i].brand_id+"\",\""+res[i].brand_name+"\",\""+res[i].brand_desc+"\")' tyle='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del(\""+res[i].brand_id+"\",\""+res[i].brand_logo+"\")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+	//添加
+	function modaldemo(){
+		$("#modal-demo").modal("show")
+	}
+	$("#add").click(function(){
+			var __token__=$("#span_token").html()
+			console.log(__token__)
+
+			var brand_name=$("#brand_name").val()
+			var brand_desc=$("#brand_desc").val()
+			var formData = new FormData();
+			formData.append('brand_logo', $('input[name=brand_logo]')[0].files[0]);
+			formData.append('brand_name',brand_name);
+			formData.append('__token__',__token__);
+			formData.append('brand_desc',brand_desc);
+			$.ajax({
+				url:"{:url('brand/addaction')}",
+				data: formData,
+				contentType: false, // 注意这里应设为false
+				processData: false,
+				cache: false,
+				dataType:'json',
+				type:'post',
+				success:function(res){
+					show()
+					getToken()
+					if (res.status=='error') {
+						$("#add_span").html(res.data)
+						$("#add_span").css("color",'red')
+					}
+					if (res.status=='ok') {
+						$("#brand_name").val('')
+						$("#brand_desc").val('')
+						$("#modal-demo").modal("hide")
+
+					}
+				}
+			})
+		})
+	//修改图片
+	function modaldemott(brand_id,brand_logo){
+		$("#up_id").html(brand_id)
+		$("#up_img").attr('src','/uploads/'+brand_logo)
+		$("#modal-demott").modal("show")
+	}
+	$("#up_brand_logo").on('change',function(){
+		var filePath=$(this).val()
+		fileFormat=filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+		src=window.URL.createObjectURL(this.files[0])
+		if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+			error_prompt_alert('上传错误，文件格式必须为:png/jpg/jpeg');
+			return;
+		}
+		$("#newimg").html("<img src='"+src+"' style='width:60px; height:30px;'>")
+	})
+	
+	$("#logo_update").click(function(){
+		var brand_id=$("#up_id").html()
+		var old_logo=$("#up_img").attr('src')
+		//console.log(old_logo)
+		//console.log(brand_id)
+		var formData = new FormData();
+		formData.append('brand_id',brand_id);
+		formData.append("old_logo",old_logo);
+		formData.append('brand_logo',$('input[name=up_brand_logo]')[0].files[0]);
+		//console.log($('input[name=up_brand_logo]')[0].files[0])
+		$.ajax({
+			url:"{:url('brand/imgupdate')}",
+			data:formData,
+			contentType:false,
+			processData:false,
+			cache:false,
+			dataType:'json',
+			method:'POST',
+			success:function(res){
+				show()
+				if (res.status=='ok') {
+					$("#up_id").html('')
+					$("#newimg").html('')
+					$("#modal-demott").modal("hide")
+				}
+			}
+		})
+	})
+	//修改文字
+	function modaldemoll(brand_id,brand_name,brand_desc){
+		$("#up_brand_id").val(brand_id)
+		$("#up_brand_name").val(brand_name)
+		$("#up_brand_desc").val(brand_desc)
+		// console.log(id_update)
+		// console.log(name_update)
+		// console.log(des_update)
+		$("#modal-demoll").modal("show")
+	}
+	$("#update").click(function(){
+		var __token__=$("#span_token").html()
+		var brand_id =$("#up_brand_id").val()
+		var brand_name = $("#up_brand_name").val()
+		var brand_desc = $("#up_brand_desc").val()
+		
+		//console.log(description)
+		$.ajax({
+			url:"{:url('brand/updateaction')}",
+			data:{
+				//__token__:__token__,
+				brand_id:brand_id,
+				brand_name:brand_name,
+				brand_desc:brand_desc,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				console.log(res.data)
+				if (res.status=='ok') {
+					$("#update_span").html('')
+					$("#modal-demoll").modal("hide")
+					show()
+					
+				}
+				if (res.status=='error') {
+					$("#update_span").html(res.data)
+					$("#update_span").css("color", "red")
+					setTimeout(function(){
+						$("#update_span").html("&nbsp;&nbsp;&nbsp;")
+					},10000);
+				}
+			}
+		})
+	})
+
+	function del(brand_id,brand_logo){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		//console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('brand/delete')}",
+				data:{
+					brand_id:brand_id,
+					brand_logo:brand_logo,
+					 //__token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					console.log(res)
+					show()
+				}
+			})
+		}
+	}
+	function datadel(){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		if (r==true){
+			var box = $(".mycheckbox:checked")
+			var brand_id = ''
+			for (var i = 0; i < box.length; i++) {
+				brand_id = brand_id+","+ box[i].value
+			}
+			$.ajax({
+				url:"{:url('brand/datadel')}",
+				data:{
+					brand_id:brand_id,
+					//__token__:__token__,
+				},
+				dataType:'json',
+				type:'post',
+				success:function(res){
+					console.log(res)
+					show()
+				}
+			})
+		}
+	}
+</script>
+</body>
+</html>

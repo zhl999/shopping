@@ -1,0 +1,239 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div class="text-c" style="margin-bottom: 10px;">
+				<form class="Huiform" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">
+					<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>
+				</form>
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray"> 
+				<span class="l"> 
+					<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+						<i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> 
+					<a class="btn btn-primary radius" href="javascript:;" >
+						<i class="Hui-iconfont">&#xe600;</i>
+						 <span onclick="modaldemo()"> 货品添加</span>
+					</a>
+				</span>
+			<span id="span_token" hidden></span>
+			<span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="mt-10">
+				<table class="table table-border table-bordered table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" name="" value=""></th>
+							<th width="70">ID</th>
+							<th width="200">商品id</th>
+							<th width="200">货品属性</th>
+							<th>货品价格</th>
+							<th>货品库存</th>
+							<th width="100">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</article>
+	</div>
+</section>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">添加货品</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<div id="div">
+					<span>分类</span>
+				</div>
+				价格:&nbsp;&nbsp;&nbsp;
+				<input type="text" name="" id="price"  placeholder="价格" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				库存:&nbsp;&nbsp;&nbsp;
+				<input type="text" name="" id="goods_number"  placeholder="库存" value="" class="input-text" style="width:200px">
+				<br>
+				<span id="add_span" style="display:block; width: 200px; margin:10px 0px 0px 45px;">&nbsp;&nbsp;</span>
+				
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="add">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="modal-demoll" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">修改货品</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<input type="text" name="" id="up_huoping_id" value="" hidden>
+				价格:&nbsp;&nbsp;&nbsp;
+				<input type="text" name="" id="up_price"  placeholder="价格" value="" class="input-text" style="width:200px">
+				<br>
+				<br>
+				库存:&nbsp;&nbsp;&nbsp;
+				<input type="text" name="" id="up_goods_number"  placeholder="库存" value="" class="input-text" style="width:200px">
+				<br>
+				<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 45px;">&nbsp;&nbsp;</span>
+				
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="footer"}
+<script type="text/javascript">
+	function modaldemo(){
+		$.ajax({
+			url:"{:url('huopin/getgoodsattr')}",
+			data:{
+				goods_id:"{$goods_id}",
+			},
+			dataType:'json',
+			success:function(res){
+				// console.log(res)
+				// return false
+				var div=''
+				$.each(res,function(key,value){
+					// console.log(value)
+					// return false
+					div=div+"<span>"+key+":</span>&nbsp;&nbsp;&nbsp;&nbsp;<select class='input-text' style='width:200px;'><option value='0'>请选择--</option>"
+					$.each(value,function(key1,value1){
+						//console.log(value1)
+						div=div+"<option value='"+value1.attr_details_id+"'>"+value1.attr_detail_name+"</option>"
+					})
+					div=div+"</select><br><br>"
+				})
+				$("#div").html(div)
+			}
+		})
+		$("#modal-demo").modal("show")
+	}
+
+	$("#add").click(function(){
+		var price=$("#price").val()
+		var goods_number=$("#goods_number").val()
+		var str=[]
+		$("#div").children("select").each(function(key,value){
+			//console.log(value)
+			for (var i = 0; i < value.length; i++) {
+				if(value.options[i].selected){
+		            str.push(value[i].value);
+		        }
+			}
+		})  
+		$.ajax({
+			url:"{:url('huopin/addAction')}",
+			data:{
+				goods_id:"{$goods_id}",
+				price:price,
+				goods_number:goods_number,
+				str:str,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				console.log(res.data)
+				if (res.status=='ok') {
+					$("#modal-demo").modal("hide")
+					show()
+
+					// $("#add_span").html(res.data)
+					// $("#add_span").css('color','green')
+					// setTimeout(function(){
+					// 	$("#add_span").html("&nbsp;&nbsp;")
+					// },3000);
+				}
+				if (res.status=='error') {
+					$("#add_span").html(res.data)
+					$("#add_span").css("color", "red")
+					setTimeout(function(){
+						$("#add_span").html("&nbsp;&nbsp;")
+					},3000);
+				}
+			}
+		})
+	})
+	function show(){
+		$.ajax({
+			url:"{:url('huopin/show')}",
+			data:{
+				goods_id:"{$goods_id}",
+			},
+			type:'post',
+			dataType:'json',
+			success:function(res){
+				console.log(res)
+				var tr = ''
+				for (var i = 0; i < res.length; i++) {
+					tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' value='"+res[i].huoping_id+"' class='mycheckbox'></td><td>"+res[i].huoping_id+"</td><td>"+res[i].goods_id+"</td><td>"+res[i].attr_detail_name+"</td><td>"+res[i].price+"</td><td>"+res[i].goods_number+"</td><td class='f-14 product-brand-manage'><a onclick='modaldemoll(\""+res[i].huoping_id+"\",\""+res[i].price+"\",\""+res[i].goods_number+"\")' tyle='text-decoration:none' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a onclick='del("+res[i].huoping_id+")' style='text-decoration:none' class='ml-5' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+				}
+				$(".table tbody").html(tr)
+			}
+		})
+	}
+	show()
+	function modaldemoll(huoping_id,price,goods_number){
+		$("#up_huoping_id").val(huoping_id)
+		$("#up_price").val(price)
+		$("#up_goods_number").val(goods_number)
+		$("#modal-demoll").modal("show")
+	}
+	$("#update").click(function(){
+		var huoping_id=$("#up_huoping_id").val()
+		var price=$("#up_price").val()
+		var goods_number=$("#up_goods_number").val()
+		$.ajax({
+			url:"{:url('huopin/updateaction')}",
+			data:{
+				huoping_id:huoping_id,
+				price:price,
+				goods_number:goods_number,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				show()
+				if (res.status=='ok') {
+					$("#modal-demoll").modal("hide")
+					show()
+					
+				}
+			}
+		})
+	})
+	function del(huoping_id){
+		var r=confirm("确定删除吗？");
+		var __token__ = $("#span_token").html()
+		console.log(__token__)
+		if (r==true){
+			$.ajax({
+				url:"{:url('huopin/delete')}",
+				data:{
+					huoping_id:huoping_id,
+					 //__token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					show()
+				}
+			})
+		}
+	}
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {include file="header"}
 
 <section class="Hui-article-box">
-	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 角色管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 用户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div class="text-c">
@@ -31,9 +31,9 @@
 						<th width="50"><input type="checkbox" value="" name=""></th>
 						<th width="50">ID</th>
 						<th width="100">登录名</th>
-						<th width="200">密码</th>
+						<th width="220">密码</th>
 						<th width="100">角色名</th>
-						<th width="120">电话</th>
+						<th width="100">电话</th>
 						<th width="120">创建时间</th>
 						<th width="100">操作</th>
 					</tr>
@@ -138,7 +138,7 @@
 		//console.log(role_id)
 		var mobile=$("#mobile").val()
 		$.ajax({
-			url:"{:url('user/addAction')}",
+			url:"{:url('user/addaction')}",
 			data:{
 				__token__:__token__,
 				user_name:user_name,
@@ -220,7 +220,7 @@
 		var mobile =$("#up_mobile").val()
 		console.log(user_name)
 		$.ajax({
-			url:"{:url('user/updateAction')}",
+			url:"{:url('user/updateaction')}",
 			data:{
 				id:id,
 				__token__:__token__,

@@ -1,0 +1,148 @@
+{include file="header"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<div style="margin-top: 30px;">
+			<div id="tree" style="width: 400px; float: left; margin-left: 30px;">
+				<ul id="tree_ul">
+					<li class="tree_li"></li>
+				</ul>
+			</div>
+			<div id="add" style="float: left; margin-top: 15px;">
+				<span id="parent_id" value='0' style="width: 120px; display: inline-block;">一级分类</span>
+				分类名称:
+					<input type="text" name="" id="cat_name"  placeholder="分类名称" value="" class="input-text" style="width:200px">
+					<button type="button" class="btn btn-success" id="addaction" name=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+			</div>
+	</div>
+</div>
+</section>
+<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content radius">
+			<div class="modal-header">
+				<h3 class="modal-title">修改分类名称</h3>
+				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+			</div>
+			<div class="modal-body">
+				<span id="up_id" hidden></span>
+				分类名称:
+					<input type="text" name="" id="up_cat_name"  placeholder="分类名称" value="" class="input-text" style="width:200px">
+					<span id="update_span" style="display:block; width: 200px; margin:10px 0px 0px 65px;">&nbsp;&nbsp;</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" id="update">确定</button>
+				<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="footer"}
+
+<script type="text/javascript">
+	function show(){
+		$.ajax({
+			url:"{:url('category/show')}",
+			success:function(res){
+				$("#tree").html(res)
+				//$("ul ul").css('display','none')
+				$(".tree_ul").css('list-style-type','square')
+				$(".tree_ul .tree_li").css('list-style-type','square');
+				//$(".tree_ul .tree_ul").css('display','none');
+			}
+		})
+	}
+	show()
+	$(document).on('click','.tree_li',function(){
+	//$(".tree_li").click(function(){
+		var parent_id_html=$(this).html()
+		var parent_id=$(this).attr('value')
+		//console.log(parent_id)
+		$("#parent_id").html(parent_id_html)
+		$("#parent_id").attr('value',parent_id)
+		var bool=$(this).next().css('display')
+		if (bool=='none') {
+			$(this).next().css('display','block')
+		}
+		if (bool=='block') {
+			$(this).next().css('display','none')
+		}
+	})
+	$("#addaction").click(function(){
+		var cat_name=$("#cat_name").val()
+		var parent_id=$("#parent_id").attr('value')
+		console.log(parent_id)
+		$.ajax({
+			url:"{:url('category/addaction')}",
+			data:{
+				cat_name:cat_name,
+				parent_id:parent_id,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				if (res.status=='ok') {
+					alert('添加成功')
+					show()
+					$("#cat_name").val('')
+					// $("#id"+parent_id).next().append("<li value='"+res.data+"'>"+cat_name+"</li>")
+
+				}
+			}
+		})
+	})
+
+	function modaldemo(id,cat_name){
+		$("#up_id").html(id)
+		$("#up_cat_name").val(cat_name)
+		$("#modal-demo").modal("show")
+	}
+	$("#update").click(function(){
+		var cat_id=$("#up_id").html()
+		var cat_name=$("#up_cat_name").val()
+		//console.log(cat_name)
+		$.ajax({
+			url:"{:url('category/updateaction')}",
+			data:{
+				cat_id:cat_id,
+				cat_name:cat_name,
+			},
+			dataType:'json',
+			type:'post',
+			success:function(res){
+				if (res.status=='ok') {
+					show()
+					$("#up_id").html('')
+					$("#up_cat_name").val('')
+					$("#modal-demo").modal("hide")
+
+				}
+				if (res.status=='error') {
+					$("#update_span").html(res.data)
+					$("#update_span").css("color",'red')
+				}
+			}
+		})
+	})
+	function del(id){
+		var r=confirm("确定删除吗？");
+		if (r==true){
+			$.ajax({
+				url:"{:url('category/del')}",
+				data:{
+					id:id,
+					 //__token__:__token__,
+				},
+				type:'post',
+				dataType:'json',
+				success:function(res){
+					//console.log(res)
+					show()
+					//getToken()
+				}
+			})
+		}
+	} 
+</script>
+</body>
+</html>
